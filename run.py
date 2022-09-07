@@ -1,5 +1,5 @@
-from flask import Flask, render_template
+from app import app
 
-# creating an instance of our Flask Class
-app = Flask(__name__)
+if __name__ == '__main__':
+    app.run()
 
