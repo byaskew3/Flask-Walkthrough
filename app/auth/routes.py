@@ -1,5 +1,9 @@
 from flask import Blueprint, render_template, request, redirect, url_for
-from .forms import UserCreationForm
+from .forms import LoginForm, UserCreationForm
+
+#import login functionality
+from flask_login import login_user, logout_user, login_required, current_user
+from werkzeug.security import check_password_hash
 
 #import models
 from app.models import User
@@ -8,10 +12,32 @@ auth = Blueprint('auth', __name__, template_folder='authtemplates')
 
 from app.models import db
 
-@auth.route('/login')
+@auth.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template('login.html')
+    form = LoginForm()
+    if request.method == 'POST':
+        if form.validate():
+            username = form.username.data
+            password = form.password.data
+            # Query user based off of username
+            user = User.query.filter_by(username=username).first()
+            print(user.id, user.username, user.password)
+            if user:
+                # compare passwords
+                if check_password_hash(user.password, password):
+                    login_user(user)
+                else:
+                    print('Incorrect Password')
+            else:
+                #if user doesnt exist
+                pass
+    return render_template('login.html', form=form)
 
+@auth.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('auth.login'))
+    
 @auth.route('/signup', methods=['GET', 'POST'])
 def signup():
     form = UserCreationForm()
