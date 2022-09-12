@@ -29,5 +29,7 @@ db.init_app(app)
 migrate = Migrate(app, db)
 login.init_app(app)
 
+login.login_view = 'auth.login'
+
 from . import routes
 from . import models
