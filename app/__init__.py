@@ -1,7 +1,7 @@
-import imp
 from flask import Flask
 from config import Config
 from flask_login import LoginManager
+from flask_moment import Moment
 
 #import blueprint
 from .auth.routes import auth
@@ -9,8 +9,10 @@ from .ig.routes import ig
 from .models import User
 
 
-app= Flask(__name__)
+app = Flask(__name__)
 login = LoginManager()
+moment = Moment(app)
+
 
 @login.user_loader
 def load_user(user_id):
@@ -29,5 +31,5 @@ db.init_app(app)
 migrate = Migrate(app, db)
 login.init_app(app)
 
-from . import routes
+login.login_view = 'auth.login'
 from . import models

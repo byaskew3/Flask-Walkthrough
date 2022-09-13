@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 from .forms import LoginForm, UserCreationForm
 
 #import login functionality
@@ -21,20 +21,21 @@ def login():
             password = form.password.data
             # Query user based off of username
             user = User.query.filter_by(username=username).first()
-            print(user.id, user.username, user.password)
             if user:
                 # compare passwords
                 if check_password_hash(user.password, password):
+                    flash('You\'ve successfully logged in!', category='success')
                     login_user(user)
+                    return redirect(url_for('ig.getAllPosts'))
                 else:
-                    print('Incorrect Password')
+                    flash('Incorrect username/password!', category='danger')
             else:
-                #if user doesnt exist
-                pass
+                flash('User does not exist on our database! Consider Signing up!', category='warning')
     return render_template('login.html', form=form)
 
 @auth.route('/logout')
 def logout():
+    flash('You\'ve successfully logged out!', category='success')
     logout_user()
     return redirect(url_for('auth.login'))
     
@@ -56,9 +57,8 @@ def signup():
             # add instance to database
             db.session.add(user)
             db.session.commit()
+            flash('You\'ve successfully signed up!', category='success')
             return redirect(url_for('auth.login'))
         else:
-            print('validation failed')
-    else:
-        print('GET request made')
+            flash('Please fill out all form input values!', category='danger')
     return render_template('signup.html', form=form)

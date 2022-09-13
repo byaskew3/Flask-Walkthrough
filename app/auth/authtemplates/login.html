@@ -11,9 +11,20 @@
 </head>
 
 <body>
+  {% with messages = get_flashed_messages(with_categories=True) %}
+      {% if messages %}
+        {% for category,message in messages %}
+        <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+          <strong>{{ message }}</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith%}
   <section class="vh-100">
     <div class="container py-5 h-100">
       <div class="row d-flex align-items-center justify-content-center h-100">
+        <h1 class="text-center fs-1">Login to Binstagram</h1>
         <div class="col-md-8 col-lg-7 col-xl-6">
           <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
             class="img-fluid" alt="Phone image">

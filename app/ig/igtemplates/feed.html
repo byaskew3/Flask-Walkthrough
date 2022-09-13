@@ -1,0 +1,18 @@
+{% extends 'base.html'%}
+
+
+{% block content %}
+
+  {% for post in posts %}
+      <a class="card mx-auto text-decoration-none text-dark" style="width: 18rem;" href="/posts/{{post.id}}">
+          <img src="{{ post.img_url }}" class="card-img-top" alt="{{ post.title }}">
+          <div class="card-body">
+              <h5 class="card-title">{{ post.title}}</h5>
+              <p class="card-text">{{ post.caption }}</p>
+              <p class="fst-italic fw-light">- {{ post.author.username }}</p>
+              <small>{{ moment(post.date_created).fromNow() }}</small>
+          </div>
+      </a>
+  {% endfor %}
+  
+{% endblock %}

@@ -33,3 +33,14 @@ class Post(db.Model):
         self.img_url = img_url
         self.caption = caption
         self.user_id = user_id
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'img_url': self.img_url,
+            'caption': self.caption,
+            'date_created': self.date_created,
+            'user_id': self.user_id,
+            'author': self.author.username
+        }
