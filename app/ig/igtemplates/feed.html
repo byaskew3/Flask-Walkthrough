@@ -10,6 +10,7 @@
               <h5 class="card-title">{{post.title}}</h5>
               <p class="card-text">{{ post.caption }}</p>
               <p class="font-weight-light" style="font-weight: 100; font-style: italic;">- {{ post.author.username }}</p>
+              <small>{{ moment(post.date_created).fromNow() }}</small>
             </div>
       </a>
   {% endfor %}

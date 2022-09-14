@@ -54,7 +54,7 @@ def signup():
             print(username, email, password)
 
             # add user to database
-            user = User(username, email, password)
+            user = User(username.lower(), email, password)
 
             # add instance to database
             db.session.add(user)

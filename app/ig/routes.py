@@ -80,3 +80,50 @@ def deletePost(post_id):
     db.session.commit()
     flash('Successfully deleted post.', category='success')
     return redirect(url_for('ig.getAllPosts'))
+
+
+############### API ROUTES ######################
+# adding layer of security (Basic: Auth)
+# @ig.route('/api/posts')
+# def getAllPostsAPI():
+#     posts = Post.query.all()
+#     posts_json = [post.to_dict() for post in posts]
+#     return {
+#         'posts': posts_json
+#     }
+
+# get single post
+@ig.route('/api/posts/<int:post_id>')
+def getSinglePostAPI(post_id):
+    post = Post.query.get(post_id)
+    if post:
+        return {
+            'status': 'ok',
+            'post': post.to_dict()
+        }
+    else:
+        return {
+            'status': 'error',
+            'code': 'Post does not exist',
+            'message': 'Please access a post that exists'
+        }
+
+# create post (post request)
+@ig.route('/api/posts/create', methods=['POST'])
+def createPostAPI():
+    data = request.json # this coming from the POST body
+    title = data['title']
+    img_url = data['img_url']
+    caption = data['caption']
+    user_id = data['user_id']
+
+    post = Post(title, img_url, caption, user_id)
+
+    # add instance to database
+    db.session.add(post)
+    db.session.commit()
+
+    return {
+        'status': 'ok',
+        'message': 'Post has successfully created.'
+    }
